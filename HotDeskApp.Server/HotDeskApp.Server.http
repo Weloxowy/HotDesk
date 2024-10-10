@@ -1,0 +1,6 @@
+@HotDeskApp.Server_HostAddress = http://localhost:5267
+
+GET {{HotDeskApp.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
