@@ -11,7 +11,7 @@ public class DeskService : IDeskService
     {
         _deskRepository = deskRepository;
     }
-    
+
     public async Task<DeskDto?> GetDeskInfo(Guid deskId)
     {
         var desk = await _deskRepository.Get(deskId);
@@ -26,9 +26,10 @@ public class DeskService : IDeskService
         {
             newList.Add(desk.ToDto());
         }
+
         return newList;
     }
-    
+
     public async Task<IEnumerable<DeskDto>> GetAllDesksInfoByLocation(Guid locationId)
     {
         var list = await _deskRepository.GetAll();
@@ -38,6 +39,7 @@ public class DeskService : IDeskService
         {
             newList.Add(desk.ToDto());
         }
+
         return newList;
     }
 
@@ -49,10 +51,10 @@ public class DeskService : IDeskService
     public async Task<IEnumerable<Guid>> CreateNewDesks(Entities.Desk desk, int numberOfDesks)
     {
         var newList = new List<Guid>();
-        
+
         var id0 = await _deskRepository.Save(desk);
         newList.Add(id0);
-        
+
         for (int i = 1; i < numberOfDesks; i++)
         {
             var newDesk = new Entities.Desk

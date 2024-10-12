@@ -11,7 +11,8 @@ public class RefreshTokenService : IRefreshTokenService
         _refreshTokenRepository = refreshTokenRepository;
     }
 
-    public async Task<HotDeskApp.Server.Models.Tokens.RefreshToken.Entities.RefreshToken> GenerateRefreshToken(Guid userId)
+    public async Task<HotDeskApp.Server.Models.Tokens.RefreshToken.Entities.RefreshToken>
+        GenerateRefreshToken(Guid userId)
     {
         var refreshToken = new HotDeskApp.Server.Models.Tokens.RefreshToken.Entities.RefreshToken
         {

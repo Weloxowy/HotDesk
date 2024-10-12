@@ -6,13 +6,13 @@ namespace gatherly.server.Persistence.Tokens.BlacklistToken;
 
 public class BlacklistTokenService : IBlacklistTokenService
 {
-    private readonly IBlacklistTokenRepository _blacklistTokenRepository ;
+    private readonly IBlacklistTokenRepository _blacklistTokenRepository;
 
     public BlacklistTokenService(IBlacklistTokenRepository blacklistTokenRepository)
     {
         _blacklistTokenRepository = blacklistTokenRepository;
     }
-    
+
 
     public void AddToBlacklist(string token, Guid userId, DateTime timeOfRemoval)
     {

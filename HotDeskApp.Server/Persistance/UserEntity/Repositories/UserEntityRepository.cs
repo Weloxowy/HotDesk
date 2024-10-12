@@ -9,13 +9,13 @@ public class UserEntityRepository : Repository<Models.UserEntity.Entities.UserEn
 {
     private readonly ISession _session;
     private readonly IUnitOfWork _unitOfWork;
-    
+
     public UserEntityRepository(ISession session, IUnitOfWork unitOfWork) : base(session, unitOfWork)
     {
         _session = session;
         _unitOfWork = unitOfWork;
     }
-    
+
     public async Task<Models.UserEntity.Entities.UserEntity?> GetByEmailAsync(string email)
     {
         return await _session.Query<Models.UserEntity.Entities.UserEntity>()

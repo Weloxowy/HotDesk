@@ -15,13 +15,13 @@ public class UserEntityService : IUserEntityService
     {
         _userEntityRepository = userEntityRepository;
     }
-    
+
     //PASSWORDHASH RELATED FUNCTIONS
-     private const int SaltSize = 16; // 128 bit
+    private const int SaltSize = 16; // 128 bit
     private const int KeySize = 32; // 256 bit
     private const int Iterations = 10000;
     private const char Delimiter = ';';
-    
+
     /// <summary>
     ///     Hashes a password using a secure hashing algorithm.
     /// </summary>
@@ -88,7 +88,7 @@ public class UserEntityService : IUserEntityService
 
         return true;
     }
-    
+
     public async Task<Entities.UserEntity> RegisterUser(UserRegisterDto data)
     {
         var user = new Entities.UserEntity()
@@ -96,7 +96,7 @@ public class UserEntityService : IUserEntityService
             Name = data.Name,
             Surname = data.Surname,
             Email = data.Email,
-            PasswordHash = HashingPassword(data.PasswordHash),
+            PasswordHash = HashingPassword(data.Password),
             UserRole = UserRole.User,
             LastTimeLogged = DateTime.Now
         };
@@ -116,11 +116,31 @@ public class UserEntityService : IUserEntityService
         {
             return null;
         }
+
         var verify = VerifyPassword(data.Password, user.PasswordHash);
         if (!verify)
         {
             return null;
         }
+
+        user.LastTimeLogged = DateTime.UtcNow;
+        await _userEntityRepository.Update(user);
+        return user;
+    }
+
+    /// <summary>
+    ///     Verifies user by user's login credentials.
+    /// </summary>
+    /// <param name="data">The login credentials.</param>
+    /// <returns>The user entity if verification is successful; otherwise, <c>null</c>.</returns>
+    public async Task<Entities.UserEntity?> VerifyUser(UserEntityDto userDto)
+    {
+        var user = await _userEntityRepository.GetByEmailAsync(userDto.Email);
+        if (user == null)
+        {
+            return null;
+        }
+
         user.LastTimeLogged = DateTime.UtcNow;
         await _userEntityRepository.Update(user);
         return user;
@@ -139,20 +159,22 @@ public class UserEntityService : IUserEntityService
             throw new ValidationException("Invalid email format.");
         }
 
-        var passwordRegex = new Regex("^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$");
-        if (!passwordRegex.IsMatch(user.PasswordHash))
+        var passwordRegex = new Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
+        if (!passwordRegex.IsMatch(user.Password))
         {
-            throw new ValidationException("Password must contain at least 8 characters, including 1 uppercase letter and 1 digit.");
+            throw new ValidationException(
+                "Password must contain at least 8 characters, including 1 uppercase letter and 1 digit.");
         }
     }
-    
+
     //BASIC SERVICE FUNCTIONS
-    
+
     public async Task<UserEntityDto?> GetUserInfo(string userEmail)
     {
         var user = await _userEntityRepository.GetByEmailAsync(userEmail);
         return user != null ? user.ToDto() : null;
     }
+
     public async Task<UserEntityDto?> GetUserInfo(Guid userId)
     {
         var user = await _userEntityRepository.Get(userId);
@@ -167,9 +189,10 @@ public class UserEntityService : IUserEntityService
         {
             newList.Add(user.ToDto());
         }
+
         return newList;
     }
-    
+
     public async Task<Guid> CreateNewUser(Entities.UserEntity userEntity)
     {
         userEntity.PasswordHash = HashingPassword(userEntity.PasswordHash);
@@ -186,5 +209,4 @@ public class UserEntityService : IUserEntityService
     {
         await _userEntityRepository.Delete(userId);
     }
-    
 }

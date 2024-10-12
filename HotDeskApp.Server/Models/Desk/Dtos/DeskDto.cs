@@ -2,11 +2,11 @@
 
 public class DeskDto
 {
-    public Guid Id { get; }
-    public virtual Guid LocationId { get; }
-    public virtual string Name { get; }
-    public virtual string Description { get; }
-    public virtual bool IsMaintnance { get; }
+    public Guid Id { get; set; }
+    public virtual Guid LocationId { get; set; }
+    public virtual string Name { get; set;}
+    public virtual string Description { get; set; }
+    public virtual bool IsMaintnance { get; set;}
 
     public DeskDto(Guid id, Guid locationId, string name, string description, bool isMaintnance)
     {

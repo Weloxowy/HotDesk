@@ -12,8 +12,7 @@ public interface IUserEntityService
     public Task UpdateUser(Entities.UserEntity userEntity);
     public Task DeleteUser(Guid userId);
     public Task<Entities.UserEntity?> VerifyUser(UserLoginDto data);
+    public Task<Entities.UserEntity?> VerifyUser(UserEntityDto data);
     public Task<Entities.UserEntity> RegisterUser(UserRegisterDto data);
     public Task ValidateRegisterData(UserRegisterDto user);
-
-
 }

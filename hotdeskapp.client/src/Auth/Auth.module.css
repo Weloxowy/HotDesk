@@ -1,0 +1,25 @@
+﻿.wrapper {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-size: 50%;
+    background: url('../../public/Office-1.jpg') no-repeat center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    border-right: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+    width: 40vw;
+    padding-top: rem(80px);
+    background-color: white; /* Dodanie tła, aby formularz był czytelny */
+    overflow-y: auto; /* Dodaje przewijanie, jeśli formularz jest dłuższy niż dostępna przestrzeń */
+    padding: 5rem; /* Dodatkowy padding, aby formularz wyglądał estetycznie */
+
+    @media (max-width: $ mantine-breakpoint-sm) {
+        max-width: 100%;
+        width: 90vw; /* Dostosowanie szerokości dla mniejszych ekranów */
+    }
+}

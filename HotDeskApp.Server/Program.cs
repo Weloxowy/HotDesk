@@ -11,12 +11,18 @@ using NHibernate;
 using HotDeskApp.Server.Infrastructure;
 using HotDeskApp.Server.Models.Desk.Repositories;
 using HotDeskApp.Server.Models.Desk.Services;
+using HotDeskApp.Server.Models.Location.Repositories;
+using HotDeskApp.Server.Models.Location.Services;
+using HotDeskApp.Server.Models.Reservation.Repositories;
+using HotDeskApp.Server.Models.Reservation.Services;
 using HotDeskApp.Server.Models.Tokens.BlacklistToken.Repositories;
 using HotDeskApp.Server.Models.Tokens.BlacklistToken.Services;
 using HotDeskApp.Server.Models.Tokens.JwtToken.Services;
 using HotDeskApp.Server.Models.Tokens.RefreshToken.Repositories;
 using HotDeskApp.Server.Models.Tokens.RefreshToken.Services;
 using HotDeskApp.Server.Persistance.Desk.Repositories;
+using HotDeskApp.Server.Persistance.Location.Repositories;
+using HotDeskApp.Server.Persistance.Reservation.Repositories;
 using HotDeskApp.Server.Persistance.Tokens.BlacklistToken.Repositories;
 using HotDeskApp.Server.Persistance.Tokens.RefreshToken.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,10 +36,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-builder.Services.AddSingleton<ISessionFactory>(provider =>
-{
-    return NHibernateHelper.SessionFactory;
-});
+builder.Services.AddSingleton<ISessionFactory>(provider => { return NHibernateHelper.SessionFactory; });
 
 builder.Services.AddScoped(provider =>
 {
@@ -51,6 +54,10 @@ builder.Services.AddScoped<IBlacklistTokenRepository, BlacklistTokenRepository>(
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<TokenHelper>();
 
 builder.Services.AddControllers();
@@ -65,7 +72,7 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
      $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 */
-    
+
     // Konfiguracja JWT
     var securityScheme = new OpenApiSecurityScheme
     {
@@ -185,7 +192,6 @@ builder.Services.AddFluentMigratorCore()
     .AddLogging(config => config.AddFluentMigratorConsole());
 
 
-
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -194,11 +200,9 @@ app.UseStaticFiles();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    });
+    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
 }
+
 using var scope = app.Services.CreateScope();
 
 var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
@@ -212,6 +216,7 @@ else
 {
     throw new Exception("Migration fault");
 }
+
 app.UseRouting();
 
 app.Use(async (context, next) =>
@@ -234,7 +239,6 @@ app.MapControllers();
 app.MapFallbackToFile("/index.html");
 
 app.Run();
-
 
 
 public class DataContext : DbContext

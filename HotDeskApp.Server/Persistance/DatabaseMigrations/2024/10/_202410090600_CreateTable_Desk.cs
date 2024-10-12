@@ -2,8 +2,8 @@
 
 namespace HotDeskApp.Server.Persistance.DatabaseMigrations._2024._10;
 
-[Migration(202410090300)]
-public class _202410090300_CreateTable_Desk : Migration
+[Migration(202410090600)]
+public class _202410090600_CreateTable_Desk : Migration
 {
     private readonly string _tableName = "Desk";
 
@@ -22,10 +22,8 @@ public class _202410090300_CreateTable_Desk : Migration
                 .NotNullable()
                 .WithColumn(nameof(Models.Desk.Entities.Desk.LocationId)).AsGuid()
                 .NotNullable();
-            /*
             Create.ForeignKey("FK_Desk_Location").FromTable("Desk").ForeignColumn("LocationId").ToTable("Location")
                 .PrimaryColumn("Id");
-                */
         }
     }
 
@@ -36,5 +34,4 @@ public class _202410090300_CreateTable_Desk : Migration
             Delete.Table(_tableName);
         }
     }
-
 }

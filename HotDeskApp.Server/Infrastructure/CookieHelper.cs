@@ -27,7 +27,7 @@ public static class CookieHelper
 
         response.Cookies.Append("RefreshToken", refreshToken, refreshCookieOptions);
     }
-    
+
     public static void ClearCookies(HttpResponse response)
     {
         response.Cookies.Delete("Authorization");

@@ -3,6 +3,6 @@
 public interface IBlacklistTokenService
 {
     public void AddToBlacklist(string token, Guid userId, DateTime timeOfRemoval);
-    public void RemoveFromBlacklist(string token); 
-    public Task<bool> IsTokenBlacklisted(string token); 
+    public void RemoveFromBlacklist(string token);
+    public Task<bool> IsTokenBlacklisted(string token);
 }

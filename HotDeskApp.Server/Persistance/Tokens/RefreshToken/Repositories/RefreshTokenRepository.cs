@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using HotDeskApp.Server.Infrastructure;
 using HotDeskApp.Server.Models.Tokens.RefreshToken.Repositories;
+using Microsoft.EntityFrameworkCore;
 using NHibernate;
 using ISession = NHibernate.ISession;
 
@@ -13,7 +14,7 @@ public class RefreshTokenRepository : IRefreshTokenRepository
 {
     private readonly ISession _session;
     private readonly IUnitOfWork _unitOfWork;
-    
+
     public RefreshTokenRepository(ISession session, IUnitOfWork unitOfWork)
     {
         _session = session;
@@ -25,7 +26,8 @@ public class RefreshTokenRepository : IRefreshTokenRepository
     /// </summary>
     /// <param name="userId">The user ID.</param>
     /// <returns>The generated refresh token.</returns>
-    public async Task<Models.Tokens.RefreshToken.Entities.RefreshToken> GenerateRefreshToken(Models.Tokens.RefreshToken.Entities.RefreshToken refreshToken)
+    public async Task<Models.Tokens.RefreshToken.Entities.RefreshToken> GenerateRefreshToken(
+        Models.Tokens.RefreshToken.Entities.RefreshToken refreshToken)
     {
         _unitOfWork.BeginTransaction();
         try
@@ -48,11 +50,11 @@ public class RefreshTokenRepository : IRefreshTokenRepository
     /// <returns>The refresh token if found and not revoked; otherwise, null.</returns>
     public async Task<HotDeskApp.Server.Models.Tokens.RefreshToken.Entities.RefreshToken> GetRefreshToken(string token)
     {
-        return await _session.GetAsync<Models.Tokens.RefreshToken.Entities.RefreshToken>(token);
-        
+        return _session.Query<Models.Tokens.RefreshToken.Entities.RefreshToken>().Where(x => x.Token == token)
+            .FirstOrDefault();
     }
-    
-    
+
+
     /// <summary>
     ///     Revokes a refresh token.
     /// </summary>
@@ -62,7 +64,8 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         _unitOfWork.BeginTransaction();
         try
         {
-            var existingToken = await _session.QueryOver<HotDeskApp.Server.Models.Tokens.RefreshToken.Entities.RefreshToken>()
+            var existingToken = await _session
+                .QueryOver<HotDeskApp.Server.Models.Tokens.RefreshToken.Entities.RefreshToken>()
                 .Where(rt => rt.Token == token)
                 .SingleOrDefaultAsync();
             if (existingToken != null)

@@ -8,9 +8,8 @@ namespace HotDeskApp.Server.Models.Tokens.JwtToken.Services;
 
 public class JwtTokenService : IJwtTokenService
 {
-    
     private readonly string _secret = Environment.GetEnvironmentVariable("SECRET");
-    
+
     /// <summary>
     ///     Generates a JWT token for a given user.
     /// </summary>
@@ -21,11 +20,11 @@ public class JwtTokenService : IJwtTokenService
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Email),              
-            new Claim(JwtRegisteredClaimNames.Jti, jti),                     
-            new Claim(ClaimTypes.Name, user.Name),                           
-            new Claim(ClaimTypes.Role, user.UserRole.ToString()),            
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())  
+            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, jti),
+            new Claim(ClaimTypes.Name, user.Name),
+            new Claim(ClaimTypes.Role, user.UserRole.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
@@ -75,7 +74,7 @@ public class JwtTokenService : IJwtTokenService
             return null;
         }
     }
-    
+
     /// <summary>
     ///     Extracts the email from the JWT token present in the cookies.
     /// </summary>
@@ -117,6 +116,4 @@ public class JwtTokenService : IJwtTokenService
 
         return userId;
     }
-
-    
 }

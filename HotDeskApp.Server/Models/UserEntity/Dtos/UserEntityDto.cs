@@ -19,7 +19,6 @@ public class UserEntityDto
         LastTimeLogged = lastTimeLogged;
         UserRole = userRole;
     }
-    
 }
 
 public static class UserEntityDtoMapping

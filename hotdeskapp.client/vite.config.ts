@@ -1,11 +1,11 @@
-import { fileURLToPath, URL } from 'node:url';
+import {fileURLToPath, URL} from 'node:url';
 import svgr from "vite-plugin-svgr";
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
-import { env } from 'process';
+import {env} from 'process';
 
 const baseFolder =
     env.APPDATA !== undefined && env.APPDATA !== ''
@@ -25,7 +25,7 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
         '--format',
         'Pem',
         '--no-password',
-    ], { stdio: 'inherit', }).status) {
+    ], {stdio: 'inherit',}).status) {
         throw new Error("Could not create certificate.");
     }
 }
@@ -41,6 +41,7 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url))
         }
     },
+    assetsInclude: ['**/*.jpg', '**/*.png', '**/*.svg'],
     server: {
         proxy: {
             '^/weatherforecast': {

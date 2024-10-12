@@ -1,5 +1,4 @@
-﻿
-using FluentMigrator;
+﻿using FluentMigrator;
 using HotDeskApp.Server.Models.Tokens.RefreshToken.Entities;
 
 namespace HotDeskApp.Server.Persistance.DatabaseMigrations._2024._10;

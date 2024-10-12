@@ -6,7 +6,7 @@ public interface IUnitOfWork : IDisposable
     /// Rozpoczyna nową transakcję.
     /// </summary>
     void BeginTransaction();
-    
+
     /// <summary>
     /// Zatwierdza bieżącą transakcję.
     /// </summary>

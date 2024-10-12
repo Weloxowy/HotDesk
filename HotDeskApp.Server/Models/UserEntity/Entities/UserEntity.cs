@@ -12,8 +12,9 @@ public class UserEntity : Entity
     public UserEntity(Guid id) : base(id)
     {
     }
-    
-    public UserEntity(Guid id, string name, string surname, string email, string passwordHash, DateTime lastTimeLogged, UserRole userRole) : base(id)
+
+    public UserEntity(Guid id, string name, string surname, string email, string passwordHash, DateTime lastTimeLogged,
+        UserRole userRole) : base(id)
     {
         Name = name;
         Surname = surname;
@@ -29,5 +30,4 @@ public class UserEntity : Entity
     public virtual string PasswordHash { get; set; }
     public virtual DateTime LastTimeLogged { get; set; }
     public virtual UserRole UserRole { get; set; }
-    
 }

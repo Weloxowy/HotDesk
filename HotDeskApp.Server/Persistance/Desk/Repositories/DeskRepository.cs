@@ -8,7 +8,7 @@ public class DeskRepository : Repository<Models.Desk.Entities.Desk>, IDeskReposi
 {
     private readonly ISession _session;
     private readonly IUnitOfWork _unitOfWork;
-    
+
     public DeskRepository(ISession session, IUnitOfWork unitOfWork) : base(session, unitOfWork)
     {
         _session = session;

@@ -15,13 +15,13 @@ namespace HotDeskApp.Server.Infrastructure
             _unitOfWork = unitOfWork;
         }
 
-        
+
         public async Task<IEnumerable<T>> GetAll()
         {
             return await Task.Run(() => _session.Query<T>().ToList());
         }
-       
-        
+
+
         public async Task<T> Get(Guid id)
         {
             return await _session.GetAsync<T>(id);
@@ -82,6 +82,5 @@ namespace HotDeskApp.Server.Infrastructure
                 throw;
             }
         }
-        
     }
 }

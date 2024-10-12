@@ -11,13 +11,13 @@ public class BlacklistTokenRepository : IBlacklistTokenRepository
 {
     private readonly ISession _session;
     private readonly IUnitOfWork _unitOfWork;
-    
+
     public BlacklistTokenRepository(ISession session, IUnitOfWork unitOfWork)
     {
         _session = session;
         _unitOfWork = unitOfWork;
     }
-    
+
     /// <summary>
     ///     Adds a token to the blacklist.
     /// </summary>
@@ -53,6 +53,7 @@ public class BlacklistTokenRepository : IBlacklistTokenRepository
             {
                 await _session.DeleteAsync(existingToken);
             }
+
             _unitOfWork.Commit();
         }
         catch
@@ -70,6 +71,6 @@ public class BlacklistTokenRepository : IBlacklistTokenRepository
     public async Task<bool> IsTokenBlacklisted(string token)
     {
         var existingToken = await _session.GetAsync<Models.Tokens.BlacklistToken.Entities.BlacklistToken>(token);
-        return existingToken.EndOfBlacklisting > DateTime.Now;
+        return existingToken != null && (existingToken.EndOfBlacklisting > DateTime.Now);
     }
 }
