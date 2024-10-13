@@ -1,6 +1,6 @@
-# HotDeskApp
+# HotSpot
 
-HotDeskApp is a web application designed for managing desk reservations and locations efficiently. This README will guide you through the setup process, including database creation and installation of required npm packages.
+HotSpot is a web application designed for managing desk reservations and locations efficiently. This README will guide you through the setup process, including database creation and installation of required npm packages.
 
 ## Table of Contents
 
@@ -27,12 +27,12 @@ Before you begin, ensure you have the following installed:
    ```
 
 ## Running the application
-Start the backend server HotDeskApp/Server using IIS Express or by running:
+Start the backend server HotDeskApp.Server using IIS Express or by running:
 ```
 dotnet run
 ```
 Frontend app should run automaticly. If cannot start the frontend application
-HotDeskApp/ClientApp using:
+hotdeskapp.client using:
 
 ```
 npm start
