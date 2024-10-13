@@ -143,8 +143,6 @@ export default function Auth() {
                         {type === 'register' ? 'Register' : 'Login'}
                     </Button>
                 </form>
-
-                {/* Toggle between login and register */}
                 {type === 'register' ? (
                     <Text ta='center' mt='md'>
                         Already have an account?{' '}

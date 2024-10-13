@@ -1,4 +1,4 @@
-﻿import {Button, Paper, Space, Text, Title} from "@mantine/core";
+﻿import {Button, MantineThemeProvider, Paper, rem, Text, Title} from "@mantine/core";
 import {DatePicker} from "@mantine/dates";
 import { useEffect, useState } from "react";
 import GetDeskAvailabilityReq from "../../lib/desk/GetDeskAvailabilityReq";
@@ -77,7 +77,7 @@ export default function DeskInfo() {
                 [`${year}-${month}`]: result,
             }));
         } catch (error) {
-            console.error("Error fetching availability:", error);
+            alert("Error fetching availability:"+ error);
         } finally {
             setLoading(false);
         }
@@ -113,6 +113,20 @@ export default function DeskInfo() {
         return true;
     };
 
+    const theme = MantineThemeProvider;
+    const numberOfComponents = 7;
+    const [width, setWidth] = useState(0);
+
+    useEffect(() => {
+        function handleResize() {
+            setWidth((window.innerWidth * 0.55) / numberOfComponents);
+        }
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const handleRangeChange = (range: [Date | null, Date | null]) => {
         const [start, end] = range;
@@ -166,7 +180,28 @@ export default function DeskInfo() {
                         onMonthChange={setCurrentMonth}
                         excludeDate={shouldDisableDate}
                         allowLevelChange={false}
-                        style={{width: "100%", maxWidth: "100vw"}}
+                        styles={(theme) => ({
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            cell: {
+                                border: `1px solid ${
+                                    theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
+                                }`,
+                            },
+                            day: { borderRadius: 0, flexGrow: 1, height: rem(70), width: `${width}px`, fontSize: theme.fontSizes.lg },
+
+                            weekday: { fontSize: theme.fontSizes.lg },
+                            weekdayCell: {
+                                fontSize: theme.fontSizes.xl,
+                                backgroundColor:
+                                    theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
+                                border: `1px solid ${
+                                    theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
+                                }`,
+                                height: 10,
+                            }
+                        })}
                     />
                 </div>
 

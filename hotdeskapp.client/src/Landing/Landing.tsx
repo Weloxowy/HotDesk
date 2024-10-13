@@ -31,8 +31,8 @@ export default function Landing() {
                         <Space h="xl"/>
                         <Button component={Link} to="/login" size={"lg"} fullWidth>Login</Button>
                     </section>
-                    <section>
-                        <Image src={"../../public/whiteLogo.svg"}/>
+                    <section  style={{width: "40vw", textAlign: "center"}}>
+                        <Image src={"../../public/main.jpg"}/>
                     </section>
                 </Flex>
             </AppShell.Main>

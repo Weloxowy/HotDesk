@@ -1,5 +1,7 @@
 ﻿using HotDeskApp.Server.Infrastructure;
+using HotDeskApp.Server.Models.Desk.Dtos;
 using HotDeskApp.Server.Models.Desk.Services;
+using HotDeskApp.Server.Models.Reservation.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,12 +17,14 @@ public class AdminDeskController : ControllerBase
 {
     private readonly IDeskService _deskService;
     private readonly TokenHelper _tokenHelper;
+    private readonly IReservationService _reservationService;
 
     /// <inheritdoc />
-    public AdminDeskController(IDeskService deskService, TokenHelper tokenHelper)
+    public AdminDeskController(IDeskService deskService, TokenHelper tokenHelper, IReservationService reservationService)
     {
         _deskService = deskService;
         _tokenHelper = tokenHelper;
+        _reservationService = reservationService;
     }
     
     /// <summary>
@@ -30,14 +34,14 @@ public class AdminDeskController : ControllerBase
     /// <returns>The ID of the newly created desk.</returns>
     [Authorize]
     [HttpPost("desk")]
-    public async Task<ActionResult<Guid>> CreateDesk([FromBody] Models.Desk.Entities.Desk desk)
+    public async Task<ActionResult<Guid>> CreateDesk([FromBody] DeskEditDto desk)
     {
         var userId = await _tokenHelper.VerifyAdmin(HttpContext, TokenHelper.TypeOfReturn.id);
         if (userId == null)
         {
             return Unauthorized("You're not an admin");
         }
-        var newDesk = await _deskService.CreateNewDesk(desk);
+        var newDesk = await _deskService.CreateNewDesk(desk.ToEntity());
         return Ok(newDesk);
     }
 
@@ -49,14 +53,14 @@ public class AdminDeskController : ControllerBase
     /// <returns>The ID of the newly created desks.</returns>
     [Authorize]
     [HttpPost("desks")]
-    public async Task<ActionResult<Guid>> CreateManyDesks([FromBody] Models.Desk.Entities.Desk desk, int numberOfDesks)
+    public async Task<ActionResult<Guid>> CreateManyDesks([FromBody] DeskEditDto desk, int numberOfDesks)
     {
         var userId = await _tokenHelper.VerifyAdmin(HttpContext, TokenHelper.TypeOfReturn.id);
         if (userId == null)
         {
             return Unauthorized("You're not an admin");
         }
-        var newDesks = await _deskService.CreateNewDesks(desk, numberOfDesks);
+        var newDesks = await _deskService.CreateNewDesks(desk.ToEntity(), numberOfDesks);
         return Ok(newDesks);
     }
     
@@ -67,7 +71,7 @@ public class AdminDeskController : ControllerBase
     /// <returns>The ID of the updated desk.</returns>
     [Authorize]
     [HttpPut("desk/{id}")]
-    public async Task<ActionResult<Guid>> UpdateDesk([FromBody] Models.Desk.Entities.Desk desk)
+    public async Task<ActionResult<Guid>> UpdateDesk([FromBody] DeskEditDto desk)
     {
         var userId = await _tokenHelper.VerifyAdmin(HttpContext, TokenHelper.TypeOfReturn.id);
         if (userId == null)
@@ -75,7 +79,7 @@ public class AdminDeskController : ControllerBase
             return Unauthorized("You're not an admin");
         }
         
-        await _deskService.UpdateDesk(desk);
+        await _deskService.UpdateDesk(desk.ToEntity());
         return Ok();
     }
     
@@ -93,7 +97,12 @@ public class AdminDeskController : ControllerBase
         {
             return Unauthorized("You're not an admin");
         }
-        
+
+        var reservations = await _reservationService.GetReservationsByDeskId(id);
+        foreach (var reservation in reservations)
+        {
+            await _reservationService.DeleteReservation(reservation.Id);
+        }
         await _deskService.DeleteDesk(id);
         return Ok();
     }

@@ -44,7 +44,7 @@ export default function AllReservations() {
             title: 'Are you sure you want to delete this reservation?',
             children: (
                 <Text>
-                    Are you sure you want to delete reservation for Desk ID: {row.original.deskName}? This action cannot be undone.
+                    Are you sure you want to delete reservation for {row.original.deskName}? This action cannot be undone.
                 </Text>
             ),
             labels: { confirm: 'Delete', cancel: 'Cancel' },
@@ -95,7 +95,6 @@ export default function AllReservations() {
                         color="red"
                         leftSection={<IconTrash />}
                         onClick={() => openDeleteConfirmModal(row)}
-                        disabled={!isReservationCancelable(row.original.startDate)}
                     >
                         Delete
                     </Button>

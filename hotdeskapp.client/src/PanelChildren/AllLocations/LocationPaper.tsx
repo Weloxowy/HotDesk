@@ -28,7 +28,7 @@ const LocationPaper = ({ loc, isAdmin }: { loc: LocationItem, isAdmin : boolean 
             <Text>{loc.description}</Text>
             <Group style={{display:"flex", width:"100%", alignItems:"stretch"}}>
                 <Button mt="md" onClick={handleClick}>
-                    Wejdź
+                    Go to location
                 </Button>
                 {isAdmin ? (
                     <Button mt="md" variant={"outline"} color={"red"} onClick={handleDelete}>Delete location</Button>

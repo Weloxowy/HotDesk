@@ -1,5 +1,5 @@
 ﻿import {useEffect, useState} from "react";
-import {Button, Group, Loader, Modal, Title} from "@mantine/core";
+import {Button, Group, Loader, Modal, Text, Title} from "@mantine/core";
 import GetAllLocationsReq from "../../lib/location/GetAllLocationsReq.ts";
 import LocationPaper from "./LocationPaper.tsx";
 import LocationItem from "../../lib/interfaces.ts";
@@ -29,8 +29,6 @@ export default function AllLocations() {
             try {
                 const data = await GetAllLocationsReq();
                 setLocations(data);
-            } catch (err) {
-                setError("Failed to fetch locations");
             } finally {
                 setLoading(false);
             }
@@ -43,28 +41,33 @@ export default function AllLocations() {
     if (error) return <div>{error}</div>;
 
     return (
-        <>
-            <Modal opened={opened} onClose={close} title="Authentication">
-                <LocationAddModal/>
+        <div style={{ paddingTop: "4rem", textAlign: "center" }}>
+            <Modal opened={opened} onClose={close} title={<Title order={3}>Add location</Title>}>
+                <LocationAddModal />
             </Modal>
-            <Group h="100%" pb={"md"} px="xl" align="center" justify="space-between" style={{
+            <Group h="100%" pb="md" px="xl" align="center" justify="space-between" style={{
                 marginTop: "4rem",
                 display: "flex",
                 flexDirection: "column",
                 width: "100%"
             }}>
-                <Title order={1} mb="md" style={{textAlign: "center"}}>
+                <Title order={1} mb="md" style={{ textAlign: "center" }}>
                     All locations
                 </Title>
-                {userData?.userRole === 1 ? (
+                {userData?.userRole === 1 && (
                     <Button onClick={open} variant="outline">Add new location</Button>
-                ) : (<></>)}
+                )}
             </Group>
             <div>
-                {locations.map((loc) => (
-                    <LocationPaper key={loc.id} loc={loc} isAdmin={userData?.userRole === 1}/>
-                ))}
+                {locations.length > 0 ? (
+                    locations.map((loc) => (
+                        <LocationPaper key={loc.id} loc={loc} isAdmin={userData?.userRole === 1} />
+                    ))
+                ) : (
+                    <Text pt="xl">No locations available.</Text>
+                )}
             </div>
-        </>
+        </div>
     );
+
 }

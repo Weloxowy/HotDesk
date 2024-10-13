@@ -8,7 +8,7 @@ public interface IReservationService
     public Task<IEnumerable<ReservationDto>> GetAllReservationsInfo();
     public Task<Guid> CreateNewReservation(Entities.Reservation reservation);
     public Task UpdateReservation(Entities.Reservation reservation);
-    public Task DeleteReservation(Guid deskId);
+    public Task DeleteReservation(Guid reservationId);
     public Task<IEnumerable<ReservationDto>> GetReservationsByDeskId(Guid deskId);
     public Task<IEnumerable<ReservationDto>> GetReservationsByUserId(Guid userId);
     public Task<IEnumerable<ReservationDto>> GetActiveReservations();
