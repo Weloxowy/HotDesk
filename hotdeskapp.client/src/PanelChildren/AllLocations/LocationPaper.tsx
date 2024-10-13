@@ -1,9 +1,22 @@
-﻿import {Button, Image, Paper, Text, Title} from "@mantine/core";
+﻿import {Button, Group, Image, Paper, Text, Title} from "@mantine/core";
 import LocationItem from "../../lib/interfaces.ts";
+import DeleteLocationReq from "../../lib/location/DeleteLocationReq.ts";
 
-const LocationPaper = ({ loc }: { loc: LocationItem }) => {
+const LocationPaper = ({ loc, isAdmin }: { loc: LocationItem, isAdmin : boolean }) => {
     const handleClick = () => {
         window.location.href = "location/" + loc.id;
+    };
+
+     const handleDelete = async () => {
+        try{
+            await DeleteLocationReq(loc.id);
+            alert("Location deleted");
+            window.location.reload();
+        }
+        catch (error) {
+           alert(error.response.data);
+        }
+
     };
 
     return (
@@ -13,9 +26,15 @@ const LocationPaper = ({ loc }: { loc: LocationItem }) => {
                 {loc.name}
             </Title>
             <Text>{loc.description}</Text>
-            <Button mt="md" onClick={handleClick}>
-                Wejdź
-            </Button>
+            <Group style={{display:"flex", width:"100%", alignItems:"stretch"}}>
+                <Button mt="md" onClick={handleClick}>
+                    Wejdź
+                </Button>
+                {isAdmin ? (
+                    <Button mt="md" variant={"outline"} color={"red"} onClick={handleDelete}>Delete location</Button>
+                ): (<></>)
+                }
+            </Group>
         </Paper>
     );
 };

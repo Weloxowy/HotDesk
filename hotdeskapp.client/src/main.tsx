@@ -13,6 +13,7 @@ import YourReservation from "./PanelChildren/YourReservations/YourReservations.t
 import AllLocations from "./PanelChildren/AllLocations/AllLocations.tsx";
 import LocationDesks from "./PanelChildren/LocationDesks/LocationDesks.tsx";
 import DeskInfo from "./PanelChildren/Desk/DeskInfo.tsx";
+import AllReservations from "./PanelChildren/AllReservations/AllReservations.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <MantineProvider theme={theme}>
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
                 </Route>
                 <Route path="/" element={<DashboardPanel/>}>
                     <Route path="reservations" element={<YourReservation/>}/>
+                    <Route path="admin-reservations" element={<AllReservations/>}/>
                     <Route path="locations" element={<AllLocations/>}/>
                     <Route path="location/:id" element={<LocationDesks/>}/>
                     <Route path="desk/:id" element={<DeskInfo/>}/>

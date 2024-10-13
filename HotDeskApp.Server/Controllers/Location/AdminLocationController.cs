@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotDeskApp.Server.Controllers.Location;
 
+/// <summary>
+/// Controller for managing locations in the system.
+/// Provides endpoints for creating, updating, and deleting locations.
+/// </summary>
 [ApiController]
 [Route("admin/")]
 public class AdminLocationController : ControllerBase
@@ -15,6 +19,7 @@ public class AdminLocationController : ControllerBase
     private readonly TokenHelper _tokenHelper;
     private readonly IDeskService _deskService;
 
+    /// <inheritdoc />
     public AdminLocationController(ILocationService locationService, TokenHelper tokenHelper, IDeskService deskService)
     {
         _locationService = locationService;
@@ -22,6 +27,11 @@ public class AdminLocationController : ControllerBase
         _deskService = deskService;
     }
 
+    /// <summary>
+    /// Creates a new location.
+    /// </summary>
+    /// <param name="location">The location to create.</param>
+    /// <returns>The ID of the newly created location.</returns>
     [Authorize]
     [HttpPost("location")]
     public async Task<ActionResult<Guid>> CreateLocation([FromBody] Models.Location.Entities.Location location)
@@ -36,6 +46,11 @@ public class AdminLocationController : ControllerBase
         return Ok(locationId);
     }
 
+    /// <summary>
+    /// Updates an existing location.
+    /// </summary>
+    /// <param name="location">The location data to update.</param>
+    /// <returns>HTTP 200 OK if the update was successful.</returns>
     [Authorize]
     [HttpPut("location")]
     public async Task<ActionResult<Guid>> UpdateLocation([FromBody] Models.Location.Entities.Location location)
@@ -49,6 +64,11 @@ public class AdminLocationController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Deletes a location by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the location to delete.</param>
+    /// <returns>HTTP 200 OK if the deletion was successful, otherwise an error message.</returns>
     [Authorize]
     [HttpDelete("location/{id}")]
     public async Task<ActionResult<Guid>> DeleteLocation(Guid id)

@@ -68,10 +68,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gatherly API", Version = "v1.1" });
-    /*
+    
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
      $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
-*/
+
 
     // Konfiguracja JWT
     var securityScheme = new OpenApiSecurityScheme

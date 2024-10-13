@@ -19,14 +19,9 @@ export default function DeskInfo() {
 
     useEffect(() => {
         const fetchLocations = async () => {
-            try {
                 const data = await getDeskByIdReq(id);
                 setDesk(data);
-            } catch (err) {
-                setError("Failed to fetch locations");
-            } finally {
                 setLoading(false);
-            }
         };
 
         fetchLocations();

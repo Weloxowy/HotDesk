@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotDeskApp.Server.Controllers.Desk;
 
+/// <summary>
+/// Controller for managing desk operations.
+/// Provides endpoints to retrieve desk information, check availability, and more.
+/// </summary>
 [ApiController]
 [Route("desk/")]
 public class DeskController : ControllerBase
@@ -13,12 +17,17 @@ public class DeskController : ControllerBase
     private readonly IDeskService _deskService;
     private readonly IReservationService _reservationService;
 
+    /// <inheritdoc />
     public DeskController(IDeskService deskService, IReservationService reservationService)
     {
         _deskService = deskService;
         _reservationService = reservationService;
     }
 
+    /// <summary>
+    /// Retrieves all desks.
+    /// </summary>
+    /// <returns>A list of DeskDto objects representing all desks.</returns>
     [Authorize]
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<DeskDto>>> GetAllDesks()
@@ -33,6 +42,11 @@ public class DeskController : ControllerBase
         return Ok(desks);
     }
 
+    /// <summary>
+    /// Retrieves desks filtered by location.
+    /// </summary>
+    /// <param name="locationId">The ID of the location for which to retrieve desks.</param>
+    /// <returns>A list of DeskDto objects representing desks at the specified location.</returns>
     [Authorize]
     [HttpGet("all/location/{locationId}")]
     public async Task<ActionResult<IEnumerable<DeskDto>>> GetDesksByLocation(Guid locationId)
@@ -47,6 +61,11 @@ public class DeskController : ControllerBase
         return Ok(desks);
     }
 
+    /// <summary>
+    /// Retrieves a specific desk by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the desk to retrieve.</param>
+    /// <returns>The DeskDto object representing the specified desk.</returns>
     [Authorize]
     [HttpGet("{id}")]
     public async Task<DeskDto> GetDeskById(Guid id)
@@ -54,8 +73,12 @@ public class DeskController : ControllerBase
         return await _deskService.GetDeskInfo(id);
     }
     
-    //if null - actualDate - wykorzystac klase z reservation: najpierw sprawdzamy czy biurko jest wyłączone z uzytkowania
-    //potem czy jest zarezerwowane na daną datę
+    /// <summary>
+    /// Checks if a specific desk is busy at a given time.
+    /// </summary>
+    /// <param name="deskId">The ID of the desk to check.</param>
+    /// <param name="timeOfReservation">The time to check for availability (defaults to now).</param>
+    /// <returns>True if the desk is busy, otherwise false.</returns>
     [Authorize]
     [HttpGet("availability/{deskId}")]
     public async Task<bool> IsDeskBusy(Guid deskId, DateTime? timeOfReservation = null)
@@ -70,7 +93,11 @@ public class DeskController : ControllerBase
         return reservations.Any(res => res.StartDate <= reservationDate && res.EndDate >= reservationDate);
     }
     
-    //lista wszystkich dostepnych biurek danego dnia
+    /// <summary>
+    /// Retrieves a list of all available desks for a given day.
+    /// </summary>
+    /// <param name="timeOfReservation">The date to check for available desks (defaults to now).</param>
+    /// <returns>A list of DeskDto objects representing all available desks.</returns>
     [Authorize]
     [HttpGet("/all/free")]
     public async Task<IEnumerable<DeskDto>> GetAllFreeDesks(DateTime? timeOfReservation = null)
@@ -89,7 +116,13 @@ public class DeskController : ControllerBase
         return freeDesks;
     }
     
-    //dni kiedy biurko jest dostepne a kiedy nie - true/false
+    /// <summary>
+    /// Checks the availability of a desk for each day of a specified month.
+    /// </summary>
+    /// <param name="deskId">The ID of the desk to check availability for.</param>
+    /// <param name="month">The month to check (1-12).</param>
+    /// <param name="year">The year to check.</param>
+    /// <returns>A list of booleans indicating the availability of the desk for each day of the month.</returns>
     [Authorize]
     [HttpGet("desk-availability/{deskId}")]
     public async Task<IList<bool>> DeskAvailabilityByMonth(Guid deskId, int month, int year)
@@ -110,6 +143,4 @@ public class DeskController : ControllerBase
         }
         return  availabilityList;
     }
-
-    
 }

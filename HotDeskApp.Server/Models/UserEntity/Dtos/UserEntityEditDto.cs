@@ -11,3 +11,4 @@ public class UserEntityEditDto
     public virtual DateTime LastTimeLogged { get; set; }
     public virtual UserRole UserRole { get; set; }
 }
+

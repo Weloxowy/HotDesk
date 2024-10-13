@@ -8,26 +8,28 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotDeskApp.Server.Controllers.UserEntity;
 
+/// <summary>
+/// Controller for managing user entities by administrators.
+/// Provides endpoints for retrieving, creating, updating, and deleting users.
+/// </summary>
 [ApiController]
 [Route("admin/")]
 public class AdminUserController : ControllerBase
 {
     private readonly IUserEntityService _userEntityService;
-    private readonly IJwtTokenService _jwtTokenService;
-    private readonly IBlacklistTokenService _blacklistTokenService;
-    private readonly IRefreshTokenService _refreshTokenService;
     private readonly TokenHelper _tokenHelper;
 
-    public AdminUserController(IUserEntityService userEntityService, IJwtTokenService jwtTokenService,
-        IBlacklistTokenService blacklistTokenService, IRefreshTokenService refreshTokenService, TokenHelper tokenHelper)
+    /// <inheritdoc />
+    public AdminUserController(IUserEntityService userEntityService, TokenHelper tokenHelper)
     {
         _userEntityService = userEntityService;
-        _jwtTokenService = jwtTokenService;
-        _blacklistTokenService = blacklistTokenService;
-        _refreshTokenService = refreshTokenService;
         _tokenHelper = tokenHelper;
     }
-
+    
+    /// <summary>
+    /// Retrieves all users in the system.
+    /// </summary>
+    /// <returns>A list of users. Returns HTTP 404 Not Found if no users exist.</returns>
     [Authorize]
     [HttpGet("users")]
     public async Task<ActionResult<IEnumerable<UserEntityDto>>> GetAllUsers()
@@ -47,6 +49,11 @@ public class AdminUserController : ControllerBase
         return Ok(users);
     }
 
+    /// <summary>
+    /// Retrieves a user by their ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to retrieve.</param>
+    /// <returns>The requested user. Returns HTTP 404 Not Found if the user does not exist.</returns>
     [Authorize]
     [HttpGet("users/{id}")]
     public async Task<ActionResult<UserEntityDto>> GetUserById(Guid id)
@@ -59,6 +66,11 @@ public class AdminUserController : ControllerBase
         return await _userEntityService.GetUserInfo(id);
     }
 
+    /// <summary>
+    /// Creates a new user.
+    /// </summary>
+    /// <param name="userEntity">The user entity to create.</param>
+    /// <returns>The ID of the newly created user.</returns>
     [Authorize]
     [HttpPost("users")]
     public async Task<ActionResult<Guid>> CreateUser([FromBody] Models.UserEntity.Entities.UserEntity userEntity)
@@ -73,6 +85,11 @@ public class AdminUserController : ControllerBase
         return Ok(newUser);
     }
 
+    /// <summary>
+    /// Updates an existing user by their ID.
+    /// </summary>
+    /// <param name="userEntity">The updated user entity.</param>
+    /// <returns>HTTP 200 OK on success.</returns>
     [Authorize]
     [HttpPut("users/{id}")]
     public async Task<ActionResult<Guid>> UpdateUser([FromBody] Models.UserEntity.Entities.UserEntity userEntity)
@@ -87,6 +104,11 @@ public class AdminUserController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Deletes a user by their ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to delete.</param>
+    /// <returns>HTTP 200 OK on successful deletion.</returns>
     [Authorize]
     [HttpDelete("users/{id}")]
     public async Task<ActionResult<Guid>> DeleteUser(Guid id)

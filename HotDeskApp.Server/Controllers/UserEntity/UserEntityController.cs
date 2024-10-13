@@ -25,7 +25,11 @@ public class UserEntityController : ControllerBase
         _userEntityService = userEntityService;
         _tokenHelper = tokenHelper;
     }
-
+    
+    /// <summary>
+    /// Retrieves a user by their ID from token.
+    /// </summary>
+    /// <returns>The requested user. Returns HTTP 404 Not Found if the user does not exist.</returns>
     [Authorize]
     [HttpGet("user")]
     public async Task<UserEntityDto> GetUserByToken()
@@ -34,6 +38,11 @@ public class UserEntityController : ControllerBase
         return await _userEntityService.GetUserInfo(Guid.Parse(userId));
     }
 
+    /// <summary>
+    /// Updates a user by their ID.
+    /// </summary>
+    /// <param name="userEntity">The entity of the user to update.</param>
+    /// <returns>HTTP 200 response. Returns HTTP 404 Not Found if the user does not exist.</returns>
     [Authorize]
     [HttpPut("user")]
     public async Task<ActionResult<Guid>> UpdateUserByToken([FromBody] Models.UserEntity.Entities.UserEntity userEntity)
@@ -43,6 +52,11 @@ public class UserEntityController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Deletes a user by their ID from token.
+    /// </summary>
+    /// <param name="id">The ID of the user to delete.</param>
+    /// <returns>HTTP 200 OK on successful deletion.</returns>
     [Authorize]
     [HttpDelete("user")]
     public async Task<ActionResult<Guid>> DeleteUser()

@@ -48,7 +48,7 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> LoginUserByPassword([FromBody] UserLoginDto data)
     {
         var user = await _userEntityService.GetUserInfo(data.Email);
-        if (user.Equals(null)) return NotFound("User profile not found");
+        if (user == null) return NotFound("User profile not found");
         var verification = await _userEntityService.VerifyUser(data);
         if (verification == null) return Unauthorized("Credentials are invalid");
         try
@@ -83,7 +83,6 @@ public class AuthenticationController : ControllerBase
     {
         var user = await _userEntityService.GetUserInfo(data.Email);
         if (user != null) return BadRequest("Email address is already used");
-        //TODO: back later
         try
         {
             await _userEntityService.ValidateRegisterData(data);

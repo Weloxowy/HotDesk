@@ -4,10 +4,13 @@ using HotDeskApp.Server.Models.Reservation.Dtos;
 using HotDeskApp.Server.Models.Reservation.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NHibernate.Criterion;
 
 namespace HotDeskApp.Server.Controllers.Reservation;
 
+/// <summary>
+/// Controller for managing reservations in the application.
+/// Provides endpoints for creating, updating, retrieving, and deleting user-specific reservations.
+/// </summary>
 [ApiController]
 [Route("reservation/")]
 public class ReservationController : ControllerBase
@@ -16,6 +19,7 @@ public class ReservationController : ControllerBase
     private readonly IDeskService _deskService;
     private readonly TokenHelper _tokenHelper;
 
+    /// <inheritdoc />
     public ReservationController(IReservationService reservationService, TokenHelper tokenHelper, IDeskService deskService)
     {
         _reservationService = reservationService;
@@ -23,8 +27,10 @@ public class ReservationController : ControllerBase
         _deskService = deskService;
     }
 
-    //tutaj wersja że tylko dla danego usera
-    
+    /// <summary>
+    /// Retrieves all reservations for the authenticated user.
+    /// </summary>
+    /// <returns>A list of reservations for the current user. Returns HTTP 404 Not Found if no reservations exist.</returns>
     [Authorize]
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<ReservationDto>>> GetAllReservations()
@@ -43,6 +49,11 @@ public class ReservationController : ControllerBase
         return Ok(reservationDtos.Where(x => x.UserId == Guid.Parse(userId)).ToList());
     }
     
+    /// <summary>
+    /// Retrieves a reservation by its ID for the authenticated user.
+    /// </summary>
+    /// <param name="id">The ID of the reservation to retrieve.</param>
+    /// <returns>The requested reservation. Returns HTTP 404 Not Found if not found.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<ReservationDto>> GetResevationById(Guid id)
     {
@@ -60,6 +71,11 @@ public class ReservationController : ControllerBase
         return reservation.UserId == Guid.Parse(userId) ? Ok(reservation) : Unauthorized();
     }
 
+    /// <summary>
+    /// Creates a new reservation.
+    /// </summary>
+    /// <param name="reservation">The reservation details to create.</param>
+    /// <returns>The ID of the created reservation.</returns>
     [HttpPost]
     public async Task<ActionResult<Guid>> CreateReservation([FromBody] ReservationEditDto reservation)
     {
@@ -67,7 +83,11 @@ public class ReservationController : ControllerBase
         var userId = await _reservationService.CreateNewReservation(entity);
         return Ok(userId);
     }
-
+    /// <summary>
+    /// Updates an existing reservation for the authenticated user.
+    /// </summary>
+    /// <param name="reservation">The updated reservation details.</param>
+    /// <returns>HTTP 200 OK on success or HTTP 401 Unauthorized if the user does not own the reservation.</returns>
     [HttpPut]
     public async Task<ActionResult<Guid>> UpdateReservation([FromBody] Models.Reservation.Entities.Reservation reservation)
     {
@@ -86,6 +106,11 @@ public class ReservationController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Deletes a reservation by its ID for the authenticated user.
+    /// </summary>
+    /// <param name="id">The ID of the reservation to delete.</param>
+    /// <returns>HTTP 200 OK on successful deletion or HTTP 401 Unauthorized if the user does not own the reservation.</returns>
     [HttpDelete("{id}")]
     public async Task<ActionResult<Guid>> DeleteReservation(Guid id)
     {

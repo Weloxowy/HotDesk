@@ -3,7 +3,6 @@ import { Link, Outlet } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import GetUserReq from "../lib/user/GetUserReq.ts";
 import UserPrivate from "../lib/interfaces.ts";
-import loginReq from "../lib/auth/LoginReq.tsx";
 import LogoutReq from "../lib/auth/LogoutReq.ts";
 
 export default function DashboardPanel() {
@@ -37,7 +36,7 @@ export default function DashboardPanel() {
                     {
                         userData.userRole === 1 ? (
                             <Group m={"lg"}>
-                                <Button variant={"subtle"} component={Link} to="/reservations">Manage Reservations</Button>
+                                <Button variant={"subtle"} component={Link} to="/admin-reservations">Manage Reservations</Button>
                                 <Button variant={"subtle"} component={Link} to="/locations">Browse locations</Button>
                             </Group>
                         ) : (
