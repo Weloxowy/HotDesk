@@ -167,10 +167,12 @@ public class AuthenticationController : ControllerBase
         if (string.IsNullOrEmpty(refreshToken))
             return BadRequest("Refresh Token is not present in the request cookies.");
         refreshToken = refreshToken.Trim();
+       /*
         var jwtToken = Request.Cookies["Authorization"];
         if (string.IsNullOrEmpty(jwtToken))
             return BadRequest("JWT Token is not present in the request cookies.");
         jwtToken = jwtToken.Trim();
+        */
         try
         {
             var isBlacklisted = await _blacklistTokenService.IsTokenBlacklisted(refreshToken);
@@ -185,7 +187,7 @@ public class AuthenticationController : ControllerBase
             if (userEntity == null) return NotFound("User not found.");
             var usr = await _userEntityService.VerifyUser(userEntity);
             var tokens = await _tokenHelper.GenerateTokens(usr);
-            await _tokenHelper.RevokeTokens(jwtToken, refreshToken, userId);
+            //await _tokenHelper.RevokeTokens(jwtToken, refreshToken, userId);
             CookieHelper.SetJwtCookie(Response, tokens.JwtToken);
             CookieHelper.SetRefreshTokenCookie(Response, tokens.RefreshToken);
             return Ok("The tokens are refreshed");

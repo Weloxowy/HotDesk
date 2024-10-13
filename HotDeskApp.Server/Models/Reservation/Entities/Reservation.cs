@@ -12,8 +12,8 @@ public class Reservation : Entity
     {
     }
 
-    public virtual Guid UserId { get; set; }
-    public virtual Guid DeskId { get; set; }
+    public virtual UserEntity.Entities.UserEntity User { get; set; }
+    public virtual Desk.Entities.Desk Desk { get; set; }
     public virtual DateTime StartDate { get; set; }
     public virtual DateTime EndDate { get; set; }
 }

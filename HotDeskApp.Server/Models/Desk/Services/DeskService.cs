@@ -18,6 +18,11 @@ public class DeskService : IDeskService
         return desk != null ? desk.ToDto() : null;
     }
 
+    public async Task<Entities.Desk?> GetDeskEntityInfo(Guid deskId)
+    {
+        var desk = await _deskRepository.Get(deskId);
+        return desk != null ? desk : null;
+    }
     public async Task<IEnumerable<DeskDto>> GetAllDesksInfo()
     {
         var list = await _deskRepository.GetAll();
@@ -33,7 +38,7 @@ public class DeskService : IDeskService
     public async Task<IEnumerable<DeskDto>> GetAllDesksInfoByLocation(Guid locationId)
     {
         var list = await _deskRepository.GetAll();
-        list = list.Where(x => x.LocationId == locationId);
+        list = list.Where(x => x.Location.Id == locationId);
         var newList = new List<DeskDto>();
         foreach (var desk in list)
         {
@@ -62,7 +67,7 @@ public class DeskService : IDeskService
                 Name = desk.Name + "_" + i,
                 Description = desk.Description,
                 IsMaintnance = desk.IsMaintnance,
-                LocationId = desk.LocationId,
+                Location = desk.Location,
             };
 
             var id = await _deskRepository.Save(newDesk);
@@ -81,4 +86,5 @@ public class DeskService : IDeskService
     {
         await _deskRepository.Delete(deskId);
     }
+    
 }

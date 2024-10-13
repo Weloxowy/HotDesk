@@ -1,12 +1,18 @@
 import {createRoot} from 'react-dom/client'
 import './index.css'
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import 'mantine-react-table/styles.css';
 import {MantineProvider} from '@mantine/core';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Landing from "./Landing/Landing.tsx";
 import {theme} from "./theme.tsx";
 import Auth from "./Auth/Auth.tsx";
 import DashboardPanel from "./Panel/Panel.tsx";
+import YourReservation from "./PanelChildren/YourReservations/YourReservations.tsx";
+import AllLocations from "./PanelChildren/AllLocations/AllLocations.tsx";
+import LocationDesks from "./PanelChildren/LocationDesks/LocationDesks.tsx";
+import DeskInfo from "./PanelChildren/Desk/DeskInfo.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <MantineProvider theme={theme}>
@@ -19,8 +25,10 @@ createRoot(document.getElementById('root')!).render(
                     {" "}
                 </Route>
                 <Route path="/" element={<DashboardPanel/>}>
-                    <Route path="reservations" element={<Auth/>}/>
-                    <Route path="locations" element={<Auth/>}/>
+                    <Route path="reservations" element={<YourReservation/>}/>
+                    <Route path="locations" element={<AllLocations/>}/>
+                    <Route path="location/:id" element={<LocationDesks/>}/>
+                    <Route path="desk/:id" element={<DeskInfo/>}/>
                 </Route>
             </Routes>
         </BrowserRouter>

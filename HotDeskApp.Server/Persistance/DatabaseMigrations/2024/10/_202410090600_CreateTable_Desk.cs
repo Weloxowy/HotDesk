@@ -20,8 +20,7 @@ public class _202410090600_CreateTable_Desk : Migration
                 .NotNullable()
                 .WithColumn(nameof(Models.Desk.Entities.Desk.IsMaintnance)).AsBoolean()
                 .NotNullable()
-                .WithColumn(nameof(Models.Desk.Entities.Desk.LocationId)).AsGuid()
-                .NotNullable();
+                .WithColumn("LocationId").AsGuid().NotNullable();
             Create.ForeignKey("FK_Desk_Location").FromTable("Desk").ForeignColumn("LocationId").ToTable("Location")
                 .PrimaryColumn("Id");
         }

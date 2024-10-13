@@ -3,7 +3,7 @@
 async function RegisterReq(name: string, surname: string, email: string, password: string) {
 
     try {
-        const response = await axiosInstance.post('user/register', {
+        const response = await axiosInstance.post('auth/register', {
             name: name, surname: surname, email: email, password: password,
         });
         return response.data;

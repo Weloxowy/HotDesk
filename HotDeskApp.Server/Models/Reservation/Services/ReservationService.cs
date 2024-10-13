@@ -44,7 +44,7 @@ public class ReservationService : IReservationService
     public async Task<IEnumerable<ReservationDto>> GetReservationsByDeskId(Guid deskId)
     {
         var reservation = await _reservationRepository.GetAll();
-        return reservation.Where(res => res.DeskId == deskId)
+        return reservation.Where(res => res.Desk.Id == deskId)
             .Select(res => res.ToDto())
             .ToList();
     }
@@ -52,7 +52,7 @@ public class ReservationService : IReservationService
     public async Task<IEnumerable<ReservationDto>> GetReservationsByUserId(Guid userId)
     {
         var reservation = await _reservationRepository.GetAll();
-        return reservation.Where(res => res.UserId == userId)
+        return reservation.Where(res => res.User.Id == userId)
             .Select(res => res.ToDto())
             .ToList();
     }

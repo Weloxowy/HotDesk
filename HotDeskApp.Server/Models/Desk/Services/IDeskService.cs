@@ -5,6 +5,7 @@ namespace HotDeskApp.Server.Models.Desk.Services;
 public interface IDeskService
 {
     public Task<DeskDto?> GetDeskInfo(Guid deskId);
+    public Task<Entities.Desk?> GetDeskEntityInfo(Guid deskId);
     public Task<IEnumerable<DeskDto>> GetAllDesksInfo();
     public Task<IEnumerable<DeskDto>> GetAllDesksInfoByLocation(Guid locationId);
     public Task<Guid> CreateNewDesk(Entities.Desk desk);

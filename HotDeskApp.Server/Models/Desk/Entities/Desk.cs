@@ -12,15 +12,7 @@ public class Desk : Entity
     {
     }
 
-    public Desk(Guid id, Guid locationId, string name, string description, bool isMaintnance) : base(id)
-    {
-        LocationId = locationId;
-        Name = name;
-        Description = description;
-        IsMaintnance = isMaintnance;
-    }
-
-    public virtual Guid LocationId { get; set; }
+    public virtual Location.Entities.Location Location { get; set; }
     public virtual string Name { get; set; }
     public virtual string Description { get; set; }
     public virtual bool IsMaintnance { get; set; }

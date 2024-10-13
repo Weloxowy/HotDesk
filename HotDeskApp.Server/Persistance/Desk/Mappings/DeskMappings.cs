@@ -11,6 +11,8 @@ public class DeskMappings : ClassMap<Models.Desk.Entities.Desk>
         Map(x => x.Name);
         Map(x => x.Description);
         Map(x => x.IsMaintnance);
-        Map(x => x.LocationId);
+        References(x => x.Location) 
+            .Column("LocationId")
+            .Not.Nullable(); 
     }
 }

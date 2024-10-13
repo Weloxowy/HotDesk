@@ -57,7 +57,7 @@ public class AdminDeskController : ControllerBase
         await _deskService.UpdateDesk(desk);
         return Ok();
     }
-
+    
     [Authorize]
     [HttpDelete("desk/{id}")]
     public async Task<ActionResult<Guid>> DeleteDesk(Guid id)
@@ -71,4 +71,27 @@ public class AdminDeskController : ControllerBase
         await _deskService.DeleteDesk(id);
         return Ok();
     }
+    
+    //zmiana dostępnosci biurka - w uzyciu lub serwis
+    [Authorize]
+    [HttpPut("change-availability/{deskId}")]
+    public async Task ChangeAvailability(Guid deskId, bool isDisabled)
+    {
+        var desk = await _deskService.GetDeskEntityInfo(deskId);
+        if (desk == null)
+        {
+            throw new ArgumentException("Desk not found");
+        }
+
+        var newDesk = new Models.Desk.Entities.Desk()
+        {
+            Description = desk.Description,
+            IsMaintnance = !desk.IsMaintnance,
+            Id = deskId,
+            Location = desk.Location,
+            Name = desk.Name
+        };
+        await _deskService.UpdateDesk(newDesk);
+    }
+
 }

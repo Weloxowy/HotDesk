@@ -9,8 +9,12 @@ public class ReservationMapping : ClassMap<Models.Reservation.Entities.Reservati
     {
         Table("Reservation");
         Id(x => x.Id);
-        Map(x => x.UserId);
-        Map(x => x.DeskId);
+        References(x => x.User) 
+            .Column("UserId")
+            .Not.Nullable(); 
+        References(x => x.Desk) 
+            .Column("DeskId")
+            .Not.Nullable(); 
         Map(x => x.StartDate);
         Map(x => x.EndDate);
     }

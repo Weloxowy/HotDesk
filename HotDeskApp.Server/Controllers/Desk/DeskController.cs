@@ -81,7 +81,7 @@ public class DeskController : ControllerBase
         foreach (var desk in allDesks)
         {
             var reservations = await _reservationService.GetReservationsByDeskId(desk.Id);
-            if (!desk.IsMaintnance && !reservations.Any(res => res.StartDate <= reservationDate && res.EndDate >= reservationDate))
+            if (!desk.IsMaintnance && !reservations.Any(res => reservationDate >= res.StartDate && reservationDate <= res.EndDate))
             {
                 freeDesks.Add(desk);
             }
@@ -89,49 +89,26 @@ public class DeskController : ControllerBase
         return freeDesks;
     }
     
-    //zmiana dostępnosci biurka - w uzyciu lub serwis
-    [Authorize]
-    [HttpPut("change-availability/{deskId}")]
-    public async Task ChangeAvailability(Guid deskId, bool isDisabled)
-    {
-        var desk = await _deskService.GetDeskInfo(deskId);
-        if (desk == null)
-        {
-            throw new ArgumentException("Desk not found");
-        }
-
-        var newDesk = new Models.Desk.Entities.Desk()
-        {
-            Description = desk.Description,
-            IsMaintnance = !desk.IsMaintnance,
-            Id = deskId,
-            LocationId = desk.LocationId,
-            Name = desk.Name
-        };
-        await _deskService.UpdateDesk(newDesk);
-    }
-    
-    
     //dni kiedy biurko jest dostepne a kiedy nie - true/false
     [Authorize]
     [HttpGet("desk-availability/{deskId}")]
-    public async Task<IList<(DateTime, bool)>> DeskAvailabilityByMonth(Guid deskId, int month, int year)
+    public async Task<IList<bool>> DeskAvailabilityByMonth(Guid deskId, int month, int year)
     {
 
         var desk = await _deskService.GetDeskInfo(deskId);
         var reservations = await _reservationService.GetReservationsByDeskId(deskId);
         
         var daysInMonth = DateTime.DaysInMonth(year, month);
-        var availabilityList = new List<(DateTime, bool)>();
+        var availabilityList = new List<bool>();
 
         for (int day = 1; day <= daysInMonth; day++)
         {
             var currentDate = new DateTime(year, month, day);
 
-            bool isFree = !desk.IsMaintnance && !reservations.Any(res => res.StartDate <= currentDate && res.EndDate >= currentDate);
-            availabilityList.Add((currentDate, isFree));
+            bool isFree = !desk.IsMaintnance && !reservations.Any(res => res.StartDate.Day <= currentDate.Day && res.EndDate.Day >= currentDate.Day);
+            availabilityList.Add(isFree);
         }
-        return availabilityList;
+        return  availabilityList;
     }
 
     

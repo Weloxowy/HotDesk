@@ -25,12 +25,11 @@ export default function Auth() {
         },
     });
 
-    // Handle login form submit
     const handleLogin = async (values: { email: string; password: string }) => {
         try {
             console.log('Login submitted');
             await loginReq(values.email, values.password);
-            window.location.href = '/home';
+            window.location.href = '/locations';
         } catch (error) {
             console.error('Error in handleLogin:', error);
             switch (error.status) {
@@ -54,7 +53,7 @@ export default function Auth() {
         try {
 
             await registerReq(values.name, values.surname, values.email, values.password);
-            window.location.href = '/home';
+            window.location.href = '/locations';
         } catch (error: any) {
             console.error('Error in handleRegisterForm:', error);
             switch (error.status) {
@@ -74,7 +73,6 @@ export default function Auth() {
         }
     };
 
-    // Select the appropriate submit handler
     const handleSubmit = async (values: any) => {
         console.log('Submitting form:', type, values);
         if (type === 'register') {

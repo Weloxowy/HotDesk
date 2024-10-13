@@ -14,14 +14,10 @@ public class _202410090700_CreateTable_Reservation : Migration
             Create.Table(_tableName)
                 .WithColumn(nameof(Models.Reservation.Entities.Reservation.Id)).AsGuid().NotNullable()
                 .PrimaryKey()
-                .WithColumn(nameof(Models.Reservation.Entities.Reservation.UserId)).AsGuid().NotNullable()
-                .NotNullable()
-                .WithColumn(nameof(Models.Reservation.Entities.Reservation.DeskId)).AsGuid().NotNullable()
-                .NotNullable()
+                .WithColumn("UserId").AsGuid().NotNullable()
+                .WithColumn("DeskId").AsGuid().NotNullable()
                 .WithColumn(nameof(Models.Reservation.Entities.Reservation.StartDate)).AsDateTime().NotNullable()
-                .NotNullable()
-                .WithColumn(nameof(Models.Reservation.Entities.Reservation.EndDate)).AsDateTime().NotNullable()
-                .NotNullable();
+                .WithColumn(nameof(Models.Reservation.Entities.Reservation.EndDate)).AsDateTime().NotNullable();
             Create.ForeignKey("FK_Reservation_User").FromTable("Reservation").ForeignColumn("UserId")
                 .ToTable("UserEntity")
                 .PrimaryColumn("Id");
